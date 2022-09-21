@@ -1,0 +1,47 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    docile (1.4.0)
+    minitest (5.16.3)
+    minitest-global_expectations (1.0.1)
+      minitest (> 5)
+    minitest-hooks (1.5.0)
+      minitest (> 5.3)
+    pg (1.4.3)
+    rack (3.0.0)
+    rack-unreloader (2.0.0)
+    rake (13.0.6)
+    refrigerator (1.4.1)
+    roda (3.60.0)
+      rack
+    sequel (5.60.1)
+    sequel-annotate (1.7.0)
+      sequel (>= 4)
+    sequel_pg (1.16.0)
+      pg (>= 0.18.0, != 1.2.0)
+      sequel (>= 4.38.0)
+    simplecov (0.21.2)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
+
+PLATFORMS
+  arm64-darwin-21
+
+DEPENDENCIES
+  minitest (>= 5.7.0)
+  minitest-global_expectations
+  minitest-hooks (>= 1.1.0)
+  rack-unreloader (>= 1.8)
+  rake
+  refrigerator (>= 1)
+  roda (>= 3.57)
+  sequel (>= 5.59)
+  sequel-annotate
+  sequel_pg (>= 1.8)
+  simplecov
+
+BUNDLED WITH
+   2.3.22

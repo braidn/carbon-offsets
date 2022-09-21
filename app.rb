@@ -1,14 +1,12 @@
 require_relative 'models'
-
 require 'roda'
-require 'tilt/sass'
 
-class App < Roda
+class PatchApp < Roda
   opts[:check_dynamic_arity] = false
   opts[:check_arity] = :warn
 
   plugin :default_headers,
-    'Content-Type'=>'text/html',
+    'Content-Type'=>'application/json',
     #'Strict-Transport-Security'=>'max-age=16070400;', # Uncomment if only allowing https:// access
     'X-Frame-Options'=>'deny',
     'X-Content-Type-Options'=>'nosniff',
@@ -16,7 +14,6 @@ class App < Roda
 
   plugin :content_security_policy do |csp|
     csp.default_src :none
-    csp.style_src :self, 'https://maxcdn.bootstrapcdn.com'
     csp.form_action :self
     csp.script_src :self
     csp.connect_src :self
@@ -24,10 +21,6 @@ class App < Roda
     csp.frame_ancestors :none
   end
 
-  plugin :route_csrf
-  plugin :flash
-  plugin :assets, css: 'app.scss', css_opts: {style: :compressed, cache: false}, timestamp_paths: true
-  plugin :render, escape: true, layout: './layout'
   plugin :public
   plugin :hash_branch_view_subdir
 
@@ -74,22 +67,16 @@ class App < Roda
     end
   end
 
-  plugin :sessions,
-    key: '_App.session',
-    #cookie_options: {secure: ENV['RACK_ENV'] != 'test'}, # Uncomment if only allowing https:// access
-    secret: ENV.send((ENV['RACK_ENV'] == 'development' ? :[] : :delete), 'APP_SESSION_SECRET')
+  plugin :json
+  plugin :render, escape: true
 
   Unreloader.require('routes', :delete_hook=>proc{|f| hash_branch(File.basename(f).delete_suffix('.rb'))}){}
 
   route do |r|
-    r.public
     r.assets
-    check_csrf!
-
     r.hash_branches('')
-
     r.root do
-      view 'index'
+      { data: {} }
     end
   end
 end
