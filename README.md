@@ -15,9 +15,14 @@ If you don't happen to know what a carbon credit is:
 
 * Ruby 3.x
 * Bundler > 2.1
-* PostgreSQL
+* PostgreSQL (libpq)
 
 ### Installing
+
+* Set pg and sequel.pg to use libpq
+
+       bundle config --local build.pg --with-opt-dir="/opt/homebrew/opt/libpq"
+       bundle config --local build.sequel_pg --with-opt-dir="/opt/homebrew/opt/libpq"
 
 * Install all Gems
 
@@ -25,7 +30,9 @@ If you don't happen to know what a carbon credit is:
 
 ### Running Tests
 
-* 
+* Run all tests
+
+      rake
 
 ### Running the App
 
@@ -34,11 +41,6 @@ If you don't happen to know what a carbon credit is:
 
 ## Acknowledgments
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+* [Roda-Sequel-Stack](https://github.com/jeremyevans/roda-sequel-stack)
 
 [cc]: https://en.wikipedia.org/wiki/Carbon_credit
