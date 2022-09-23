@@ -8,8 +8,8 @@ end
 require 'rack/unreloader'
 Unreloader = Rack::Unreloader.new(subclasses: %w'Roda Sequel::Model', logger: logger, reload: dev){patchApp}
 require_relative 'models'
-Unreloader.require('app.rb'){'patchApp'}
-run(dev ? Unreloader : patchApp.freeze.app)
+Unreloader.require('app.rb'){'PatchApp'}
+run(dev ? Unreloader : PatchApp.freeze.app)
 
 freeze_core = false
 #freeze_core = !dev # Uncomment to enable refrigerator
@@ -18,8 +18,6 @@ if freeze_core
     require 'refrigerator'
   rescue LoadError
   else
-    require 'tilt/sass' unless File.exist?(File.expand_path('../compiled_assets.json', __FILE__))
-
     # When enabling refrigerator, you may need to load additional
     # libraries before freezing the core to work correctly.  You'll
     # want to uncomment the appropriate lines below if you run into

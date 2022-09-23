@@ -7,7 +7,6 @@ class PatchApp < Roda
 
   plugin :default_headers,
     'Content-Type'=>'application/json',
-    #'Strict-Transport-Security'=>'max-age=16070400;', # Uncomment if only allowing https:// access
     'X-Frame-Options'=>'deny',
     'X-Content-Type-Options'=>'nosniff',
     'X-XSS-Protection'=>'1; mode=block'
@@ -31,11 +30,6 @@ class PatchApp < Roda
   end
   plugin :common_logger, logger
 
-  plugin :not_found do
-    @page_title = "File Not Found"
-    view(:content=>"")
-  end
-
   if ENV['RACK_ENV'] == 'development'
     plugin :exception_page
     class RodaRequest
@@ -55,25 +49,21 @@ class PatchApp < Roda
   plugin :error_handler do |e|
     case e
     when Roda::RodaPlugins::RouteCsrf::InvalidToken
-      @page_title = "Invalid Security Token"
       response.status = 400
-      view(:content=>"<p>An invalid security token was submitted with this request, and this request could not be processed.</p>")
+      { data: { errors: [e.message] }}
     else
       $stderr.print "#{e.class}: #{e.message}\n"
       $stderr.puts e.backtrace
       next exception_page(e, :assets=>true) if ENV['RACK_ENV'] == 'development'
-      @page_title = "Internal Server Error"
-      view(:content=>"")
+      { data: { errors: [e.message] }}
     end
   end
 
   plugin :json
-  plugin :render, escape: true
 
   Unreloader.require('routes', :delete_hook=>proc{|f| hash_branch(File.basename(f).delete_suffix('.rb'))}){}
 
   route do |r|
-    r.assets
     r.hash_branches('')
     r.root do
       { data: {} }
