@@ -29,4 +29,27 @@ describe '/api' do
       _(JSON.parse(response.body, symbolize_names: true)[:_links]).must_equal( { self: { href: "/api/projects/#{@project.id}/offsets/#{new_offset.id}"} } )
     end
   end
+
+  describe '#GET projects/1/offsets returns a list of offsets for the project' do
+    it 'returns a 200 status code' do
+      response = get "api/projects/#{@project.id}/offsets" 
+
+      _(response.status).must_equal 200
+    end
+
+    it 'returns a list of offsets for the project' do
+      offset = Offset.create({ mass_g: 100000, price_cents_usd: 3000.0, project_id: @project.id })
+      response = get "api/projects/#{@project.id}/offsets" 
+
+      _(JSON.parse(response.body, symbolize_names: true)[:_embedded][:offsets]).must_equal([
+        offset.values
+      ])
+    end
+
+    it 'returns a count of the total offsets' do
+      response = get "api/projects/#{@project.id}/offsets" 
+
+      _(JSON.parse(response.body, symbolize_names: true)[:count]).must_equal( Offset.dataset.all.count )
+    end
+  end
 end

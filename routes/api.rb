@@ -17,6 +17,13 @@ class PatchApp
         response.status = 201
         { data: { id: offset.id }, _links: { self: { href: "/api/projects/#{project.id}/offsets/#{offset.id}" } } }
       end
+
+      r.get 'offsets' do
+        offsets = Offset.dataset.where(project_id: project.id)
+
+        response.status = 200
+        { _embedded: { offsets: offsets.all.map(&:values) }, count: offsets.count }
+      end
     end
   end
 end
