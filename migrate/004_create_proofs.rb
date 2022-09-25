@@ -2,7 +2,7 @@ Sequel.migration do
   change do
     create_table(:proofs) do
       primary_key :id
-      String :proof_key
+      String :serial_number
       Integer :mass_g
       Integer :offset_id
       DateTime :updated_at
