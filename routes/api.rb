@@ -16,6 +16,25 @@ class PatchApp
       end
     end
 
+    r.get 'payments' do
+      payments = Order.join(:offsets, id: :offset_id)
+        .join(:projects, id: :project_id)
+        .select_all(:orders)
+        .select_append(:project_id, Sequel.as(:name, :project_name))
+        .where(captured: true)
+
+      serialized_payments = payments.all.map do |payment|
+        {
+          id: payment[:id],
+          mass_g: payment[:mass_g],
+          _embedded: { project: { id: payment[:project_id], name: payment[:project_name] } }
+        }
+      end
+
+      response.status = 200
+      { _embedded: { payments: serialized_payments } }
+    end
+
     r.on 'projects', Integer do |project_id|
       project = Project.dataset.find(project_id).first
 

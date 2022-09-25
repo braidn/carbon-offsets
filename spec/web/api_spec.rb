@@ -4,6 +4,7 @@ describe '/api' do
   before :all do
     @project = Project.create( name: "Forestry" )
     @offset = Offset.create({ mass_g: 100000, price_cents_usd: 3000.0, project_id: @project.id })
+    @payment = Order.create({ offset_id: @offset.id, mass_g: 40000, captured: true } )
   end
   
   describe '#POST projects/1/offsets adds offset inventory to a given project' do
@@ -76,6 +77,28 @@ describe '/api' do
       new_proof = Proof.dataset.last
 
       _(JSON.parse(response.body, symbolize_names: true)[:_links]).must_equal( { self: { href: "/api/proofs/#{new_proof.id}"} } )
+    end
+  end
+
+  describe '#GET /payments returns a list of payments completed for each project' do
+    it 'returns a 200 status code' do
+      response = get '/api/payments'
+
+      _(response.status).must_equal 200
+    end
+
+    it 'returns a list of payments for all projects' do
+      response = get '/api/payments'
+
+      _(JSON.parse(response.body, symbolize_names: true)[:_embedded][:payments].map {|payment| payment[:id] }).must_include(@payment.id)
+    end
+
+    it 'includes embeded values of each project per payment' do
+      response = get '/api/payments'
+
+      _(JSON.parse(response.body, symbolize_names: true)[:_embedded][:payments][0][:_embedded][:project]).must_equal(
+        { id: @project[:id], name: @project[:name] }
+      )
     end
   end
 end
