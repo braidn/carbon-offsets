@@ -2,7 +2,7 @@ class Proof < Sequel::Model
   def validate
     super
 
-    errors.add(:mass, 'cannot exceed Offset mass') if mass_outweighs_offset?
+    errors.add(:mass_g, 'cannot exceed Offset mass') if mass_outweighs_offset?
   end
 
 
