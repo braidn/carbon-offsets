@@ -6,7 +6,7 @@ if dev
 end
 
 require 'rack/unreloader'
-Unreloader = Rack::Unreloader.new(subclasses: %w'Roda Sequel::Model', logger: logger, reload: dev){patchApp}
+Unreloader = Rack::Unreloader.new(subclasses: %w'Roda Sequel::Model', logger: logger, reload: dev){PatchApp}
 require_relative 'models'
 Unreloader.require('app.rb'){'PatchApp'}
 run(dev ? Unreloader : PatchApp.freeze.app)
