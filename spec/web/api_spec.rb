@@ -55,7 +55,7 @@ describe '/api' do
   end
 
   describe '#POST offsets/1/proofs adds a proof to an offset' do
-    let(:params) { { mass: 100340, serial_number: "123MEPLS" } }
+    let(:params) { { mass: 1340, serial_number: "123MEPLS" } }
 
     it 'returns a created status code' do
       response = post "api/offsets/#{@offset.id}/proofs", params
