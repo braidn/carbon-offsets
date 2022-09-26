@@ -11,16 +11,16 @@ offsets = [
   { "project_id": 3, "mass_g": 10000000, "price_cents_usd": 300000.0, "retired": false }
 ]
 orders = [
-  { "offset_id": 4, "mass_g": 2000000 },
-  { "offset_id": 4, "mass_g": 4000000 },
-  { "offset_id": 4, "mass_g": 4000000 },
-  { "offset_id": 1, "mass_g": 1000000 },
-  { "offset_id": 1, "mass_g": 10000000 },
-  { "offset_id": 1, "mass_g": 20000000 },
-  { "offset_id": 3, "mass_g": 100000000 },
-  { "offset_id": 2, "mass_g": 25000000 },
-  { "offset_id": 2, "mass_g": 25000000 },
-  { "offset_id": 5, "mass_g": 5000000 }
+  { "offset_id": 4, "mass_g": 2000000, captured: false },
+  { "offset_id": 4, "mass_g": 4000000, captured: false },
+  { "offset_id": 4, "mass_g": 4000000, captured: false },
+  { "offset_id": 1, "mass_g": 1000000, captured: false },
+  { "offset_id": 1, "mass_g": 10000000, captured: false },
+  { "offset_id": 1, "mass_g": 20000000, captured: false },
+  { "offset_id": 3, "mass_g": 10000000, captured: false },
+  { "offset_id": 2, "mass_g": 25000000, captured: false },
+  { "offset_id": 2, "mass_g": 25000000, captured: false },
+  { "offset_id": 5, "mass_g": 5000000, captured: false }
 ]
 
 projects.each { |project| Project.create(project) }
