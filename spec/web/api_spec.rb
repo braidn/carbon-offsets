@@ -100,5 +100,15 @@ describe '/api' do
         { id: @project[:id], name: @project[:name] }
       )
     end
+
+    describe '#GET /payments?type=new is a param that toggles new orders versus captured payments' do
+      it 'returns a list of uncaputured orders for the project' do
+        order = Order.create({ offset_id: @offset.id, mass_g: 40000 } )
+
+        response = get '/api/payments?type=new'
+
+        _(JSON.parse(response.body, symbolize_names: true)[:_embedded][:payments].map {|payment| payment[:id] }).must_include(order.id)
+      end
+    end
   end
 end

@@ -21,7 +21,8 @@ class PatchApp
         .join(:projects, id: :project_id)
         .select_all(:orders)
         .select_append(:project_id, Sequel.as(:name, :project_name))
-        .where(captured: true)
+
+      r.params['type'] == 'new' ? payments.where(captured: false) : payments.where(captured: true)
 
       serialized_payments = payments.all.map do |payment|
         {
