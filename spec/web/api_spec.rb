@@ -20,7 +20,7 @@ describe '/api' do
       response = post "api/projects/#{@project.id}/offsets", params
       new_offset = Offset.dataset.last
 
-      _(JSON.parse(response.body, symbolize_names: true)[:data]).must_equal( { id: new_offset.id } )
+      _(JSON.parse(response.body, symbolize_names: true)[:id]).must_equal( new_offset.id )
     end
 
     it 'returns a URL to be able to re-request the details of the new offset' do
@@ -125,7 +125,7 @@ describe '/api' do
       )
     end
 
-    describe '#GET /payments?type=new is a param that toggles new orders versus captured payments' do
+    describe '#GET /payments?type=new toggles new orders versus captured payments' do
       it 'returns a list of uncaputured orders for the project' do
         order = Order.create({ offset_id: @offset.id, mass_g: 40000 } )
 

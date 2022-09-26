@@ -33,8 +33,7 @@ class PatchApp
         .join(:projects, id: :project_id)
         .select_all(:orders)
         .select_append(:project_id, Sequel.as(:name, :project_name))
-
-      r.params['type'] == 'new' ? payments.where(captured: false) : payments.where(captured: true)
+        .where(captured: !(r.params['type'] == 'new'))
 
       serialized_payments = payments.all.map do |payment|
         {
@@ -45,7 +44,7 @@ class PatchApp
       end
 
       response.status = 200
-      { _embedded: { payments: serialized_payments } }
+      { _embedded: { payments: serialized_payments || [{}] } }
     end
 
     r.on 'projects', Integer do |project_id|
@@ -63,7 +62,7 @@ class PatchApp
         offset = Offset.create({ mass_g: params[:mass], price_key.to_sym => params[:price_in_cents], project_id: project.id })
 
         response.status = 201
-        { data: { id: offset.id }, _links: { self: { href: "/api/projects/#{project.id}/offsets/#{offset.id}" } } }
+        { id: offset.id , _links: { self: { href: "/api/projects/#{project.id}/offsets/#{offset.id}" } } }
       end
 
       r.get 'offsets' do
