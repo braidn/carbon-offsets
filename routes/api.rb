@@ -9,10 +9,22 @@ class PatchApp
           params.str!('serial_number')
         end
 
-        proof = Proof.create({ mass_g: params[:mass], serial_number: params[:serial_number], offset_id: offset.id })
+        proof = Proof.new({ mass_g: params[:mass], serial_number: params[:serial_number], offset_id: offset.id })
 
-        response.status = 201
-        { id: proof.id, _links: { self: { href: "/api/proofs/#{proof.id}"} } }
+        if proof.valid? && proof.save
+          response.status = 201
+          { id: proof.id, _links: { self: { href: "/api/proofs/#{proof.id}"} } }
+        else
+          response.status = 409
+          error_collection = proof.errors.map do |error|
+            description = error[1][0].split(':')[0]
+            remediation = error[1][0].split(':')[1]
+
+            { description: description, statusCode: 409, attribute: "proof.#{error[0].to_s}", remediation: remediation }
+          end
+
+          { _errors: error_collection }
+        end
       end
     end
 

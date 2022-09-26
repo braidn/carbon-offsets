@@ -78,6 +78,30 @@ describe '/api' do
 
       _(JSON.parse(response.body, symbolize_names: true)[:_links]).must_equal( { self: { href: "/api/proofs/#{new_proof.id}"} } )
     end
+
+    describe 'errors' do
+      let(:params) { { mass: 1000340, serial_number: "123MEPLS" } }
+
+      it 'returns a conflic status code' do
+        response = post "api/offsets/#{@offset.id}/proofs", params
+
+        _(response.status).must_equal 409
+      end
+
+      it 'returns a list of actionable errors under the _errors top level key' do
+      
+        response = post "api/offsets/#{@offset.id}/proofs", params
+      
+        _(JSON.parse(response.body, symbolize_names: true)[:_errors]).must_equal(
+          [{ 
+            description: 'Cannot exceed Offset mass',
+            statusCode: 409,
+            attribute: 'proof.mass_g',
+            remediation: 'Reassess mass required for Proof and pass a value less than or equal to the Offset mass'
+          }]
+        )
+      end
+    end
   end
 
   describe '#GET /payments returns a list of payments completed for each project' do
