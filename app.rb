@@ -20,6 +20,8 @@ class PatchApp < Roda
     csp.frame_ancestors :none
   end
 
+  plugin :route_csrf, check_request_methods: [ 'DELETE', 'PATCH', 'PUT' ]
+
   plugin :public
   plugin :hash_branch_view_subdir
 
@@ -50,12 +52,12 @@ class PatchApp < Roda
     case e
     when Roda::RodaPlugins::RouteCsrf::InvalidToken
       response.status = 400
-      { data: { errors: [e.message] }}
+      { _errors: [e.message] }
     else
       $stderr.print "#{e.class}: #{e.message}\n"
       $stderr.puts e.backtrace
       next exception_page(e, :assets=>true) if ENV['RACK_ENV'] == 'development'
-      { data: { errors: [e.message] }}
+      { _errors: [e.message] }
     end
   end
 
