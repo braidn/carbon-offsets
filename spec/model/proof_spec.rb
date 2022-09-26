@@ -10,7 +10,9 @@ describe Proof do
       proof = Proof.new({ mass_g: 200000, serial_number: '123MEPLS', offset_id: @offset.id })
       proof.valid?
       
-      _(proof.errors[:mass_g]).must_include('cannot exceed Offset mass')
+      _(proof.errors[:mass_g]).must_include(
+        'Cannot exceed Offset mass:Reassess mass required for Proof and pass a value less than or equal to the Offset mass'
+      )
     end
   end
 end
