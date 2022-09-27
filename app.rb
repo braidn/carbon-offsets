@@ -62,6 +62,7 @@ class PatchApp < Roda
   end
 
   plugin :json
+  plugin :json_parser
   plugin :typecast_params
 
   Unreloader.require('routes', :delete_hook=>proc{|f| hash_branch(File.basename(f).delete_suffix('.rb'))}){}
