@@ -31,6 +31,7 @@ If you don't happen to know what a carbon credit is:
 ### The Datastore
 
 It's recommended to use a container for PostgreSQL or perhaps a 'cloud environment'.
+This process often times creates a user + database + password.
 Export the following two environment variables with relevant PostgreSQL connection strings:
 
         APP_TEST_DATABASE_URL
@@ -54,10 +55,12 @@ Export the following two environment variables with relevant PostgreSQL connecti
 
         rake
 
-
 ### Running the App
 
 * Install any rack server gem ([Rackup][ru], [Mr Sparkle][ms], [Shotgun][sh])
+
+        gem install rackup
+
 * Run the above server gem using the provided `config.rb` eg:
 
         rackup config.rb
@@ -65,6 +68,17 @@ Export the following two environment variables with relevant PostgreSQL connecti
 ## Acknowledgments
 
 * [Roda-Sequel-Stack](https://github.com/jeremyevans/roda-sequel-stack)
+
+## Tradeoffs
+
+1. There are no serializers in the project.
+This makes the routes a bit more 'muddled' than they need to be.
+However with the small amount of routes, it made sense as a tradeoff.
+1. Errors are a bit odd.
+Ideally there would be an error handling set of Ruby objects to orchestrate the complexities of errors in an API.
+This feels like a stretch for the time cap of this project.
+1. There's no linting/formating.
+Again, this can be fiddly for the time limit here.
 
 [cc]: https://en.wikipedia.org/wiki/Carbon_credit
 [ru]: https://github.com/rack/rackup
