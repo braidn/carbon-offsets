@@ -19,8 +19,7 @@ class Proof < Sequel::Model
   end
 
   def mass_outweighs_offset?
-    return true if mass_g > offset[:mass_g]
-    false
+    mass_g > offset[:mass_g]
   end
 
   def mass_outweighed_error_msg
