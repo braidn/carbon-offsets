@@ -39,3 +39,4 @@ if freeze_core
     Refrigerator.freeze_core
   end
 end
+
